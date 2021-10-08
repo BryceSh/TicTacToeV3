@@ -18,6 +18,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class Main {
 
@@ -37,6 +40,7 @@ public class Main {
     private static JButton btn9;
     private static JLabel gameText;
     private static int btnClick;
+    private static boolean gameOver = false; // No touchy!!!
 
 
     public static void main(String[] args) {
@@ -115,8 +119,9 @@ public class Main {
             }
         });
 
-        gameText = new JLabel("Testing");
+        gameText = new JLabel("");
         gameText.setVisible(true);
+        gameText.setSize(new Dimension(400, 20));
         Dimension btnSize = new Dimension(50, 50);
         btn1.setPreferredSize(btnSize);
         btn2.setPreferredSize(btnSize);
@@ -154,9 +159,147 @@ public class Main {
 
     }
 
+    public static String checkWinner() {
+
+        List<List> winning = new ArrayList<List>();
+        winning.add(Arrays.asList(1,2,3));
+        winning.add(Arrays.asList(4,5,6));
+        winning.add(Arrays.asList(7,8,9));
+        winning.add(Arrays.asList(1,4,7));
+        winning.add(Arrays.asList(2,5,8));
+        winning.add(Arrays.asList(3,6,9));
+        winning.add(Arrays.asList(1,5,9));
+        winning.add(Arrays.asList(3,5,7));
+        winning.add(Arrays.asList(1,3,7,9));
+
+        for (List l : winning) {
+            if (playerPositions.containsAll(l)) {
+                gameOver = true;
+                System.out.println("Player Wins!");
+                toggleButtons(false);
+                System.out.println(gameOver);
+                gameText.setText("Player Wins!");
+                return "Player Won!";
+            }
+        }
+        for (List l : winning) {
+            if (cpuPositions.containsAll(l)) {
+                gameOver = true;
+                toggleButtons(false);
+                System.out.println("CPU Wins!");
+                return "CPU Won!";
+            }
+        }
+        if (playerPositions.size() + cpuPositions.size() == 9) {
+            gameOver = true;
+            System.out.println("Tie Wins!");
+            toggleButtons(false);
+            return "Tie!";
+
+        }
+
+        return "";
+
+    }
+
+    public static void toggleButtons(boolean enabled) {
+
+        btn1.setEnabled(enabled);
+        btn2.setEnabled(enabled);
+        btn3.setEnabled(enabled);
+        btn4.setEnabled(enabled);
+        btn5.setEnabled(enabled);
+        btn6.setEnabled(enabled);
+        btn7.setEnabled(enabled);
+        btn8.setEnabled(enabled);
+        btn9.setEnabled(enabled);
+
+    }
+
     public static void placePlayerPiece(int pos, String player) {
 
-        System.out.println("Submitted Values: " + pos + " from player: " + player);
+        // Checks to see if the player or CPU has already played that piece.
+        boolean placePiece = false;
+        String symbol = " ";
+
+        if (pos < 10) {
+            if (playerPositions.contains(pos) || cpuPositions.contains(pos)) {
+
+                gameText.setText("You can't go there!");
+
+            } else {
+
+                System.out.println("Great Success!");
+                if (player.equals("player")) {
+
+                    playerPositions.add(pos);
+                    symbol = "X";
+                    placePiece = true;
+                    placePlayerPiece(cpuPositionPicker(), "cpu");
+
+                } else if (player.equals("cpu")) {
+
+                    cpuPositions.add(pos);
+                    symbol = "O";
+                    placePiece = true;
+
+                } else {
+
+                    System.err.println("Trying to call a player that does not exist!");
+
+                }
+
+            }
+            if (placePiece) {
+
+                gameText.setText("");
+
+                if (pos == 1) {
+                    btn1.setText(symbol);
+                } else if (pos == 2) {
+                    btn2.setText(symbol);
+                } else if (pos == 3) {
+                    btn3.setText(symbol);
+                } else if (pos == 4) {
+                    btn4.setText(symbol);
+                } else if (pos == 5) {
+                    btn5.setText(symbol);
+                } else if (pos == 6) {
+                    btn6.setText(symbol);
+                } else if (pos == 7) {
+                    btn7.setText(symbol);
+                } else if (pos == 8) {
+                    btn8.setText(symbol);
+                } else if (pos == 9) {
+                    btn9.setText(symbol);
+                }
+
+
+            }
+
+        }
+
+        if (!gameOver) {
+            gameText.setText(checkWinner());
+        }
+
+        System.out.println("Player Positions: " + playerPositions);
+        System.out.println("CPU Positions: " + cpuPositions);
+
+    }
+
+    public static int cpuPositionPicker() {
+
+        Random rand = new Random();
+        int pickedPosition = rand.nextInt(9) + 1;
+        while (playerPositions.contains(pickedPosition) || cpuPositions.contains(pickedPosition)) {
+            pickedPosition = rand.nextInt(9) + 1;
+            if (playerPositions.size() + cpuPositions.size() == 9) {
+                System.out.println("Can't play, no more moves.");
+                return 10;
+            }
+        }
+        return pickedPosition;
 
     }
 
