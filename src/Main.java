@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Main {
+public class Main implements ActionListener {
 
-    public static int frameWidth =  400;
+    public static int frameWidth = 400;
     public static int frameHeight = 500;
     private static JButton btn1;
     private static JButton btn2;
@@ -14,11 +16,13 @@ public class Main {
     private static JButton btn7;
     private static JButton btn8;
     private static JButton btn9;
+    private static int btnClick;
+
 
     public static void main(String[] args) {
 
         JFrame frame = new JFrame();
-        frame.setSize(300,400);
+        frame.setSize(300, 400);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -37,7 +41,7 @@ public class Main {
         btn8 = new JButton(" ");
         btn9 = new JButton(" ");
 
-        Dimension btnSize = new Dimension(50,50);
+        Dimension btnSize = new Dimension(50, 50);
         btn1.setPreferredSize(btnSize);
         btn2.setPreferredSize(btnSize);
         btn3.setPreferredSize(btnSize);
@@ -58,6 +62,8 @@ public class Main {
         btn8.setVisible(true);
         btn9.setVisible(true);
 
+        btn1.addActionListener(new Main());
+
         buttonPanel.add(btn1);
         buttonPanel.add(btn2);
         buttonPanel.add(btn3);
@@ -70,6 +76,14 @@ public class Main {
 
         frame.pack();
         frame.repaint();
+
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+
 
     }
 }
