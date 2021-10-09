@@ -40,6 +40,7 @@ public class Main {
     private static JButton btn9;
     private static JLabel gameText;
     private static boolean gameOver = false; // No touchy!!!
+    private static JLabel infoText;
 
 
     public static void main(String[] args) {
@@ -62,7 +63,7 @@ public class Main {
         contentPanel.add(buttonPanel);
 
         JPanel gameInfo = new JPanel();
-        gameInfo.setLayout(new FlowLayout());
+        gameInfo.setLayout(new GridLayout(2,1));
         contentPanel.add(gameInfo);
 
         btn1 = new JButton(new AbstractAction("") {
@@ -138,8 +139,13 @@ public class Main {
                 btn7.setText(" ");
                 btn8.setText(" ");
                 btn9.setText(" ");
+                infoText.setText("Click any button to begin!");
             }
         });
+
+        infoText = new JLabel("Click any button to begin!", SwingConstants.CENTER);
+        infoText.setVisible(true);
+
         Dimension btnSize = new Dimension(50, 50);
         btn1.setPreferredSize(btnSize);
         btn2.setPreferredSize(btnSize);
@@ -151,16 +157,6 @@ public class Main {
         btn8.setPreferredSize(btnSize);
         btn9.setPreferredSize(btnSize);
 
-        btn1.setVisible(true);
-        btn2.setVisible(true);
-        btn3.setVisible(true);
-        btn4.setVisible(true);
-        btn5.setVisible(true);
-        btn6.setVisible(true);
-        btn7.setVisible(true);
-        btn8.setVisible(true);
-        btn9.setVisible(true);
-
         buttonPanel.add(btn1);
         buttonPanel.add(btn2);
         buttonPanel.add(btn3);
@@ -170,8 +166,8 @@ public class Main {
         buttonPanel.add(btn7);
         buttonPanel.add(btn8);
         buttonPanel.add(btn9);
-        gameInfo.add(gameText);
         gameInfo.add(resetGame);
+        gameInfo.add(infoText);
 
         frame.pack();
         frame.repaint();
@@ -180,7 +176,7 @@ public class Main {
 
     }
 
-    public static String checkWinner() {
+    public static void checkWinner() {
 
         List<List> winning = new ArrayList<List>();
         winning.add(Arrays.asList(1,2,3));
@@ -199,8 +195,7 @@ public class Main {
                 System.out.println("Player Wins!");
                 toggleButtons(false);
                 System.out.println(gameOver);
-                gameText.setText("Player Wins!");
-                return "Player Won!";
+                infoText.setText("Player Wins!");
             }
             System.out.println("Tested: " + l);
         }
@@ -208,19 +203,15 @@ public class Main {
             if (cpuPositions.containsAll(l)) {
                 gameOver = true;
                 toggleButtons(false);
-                System.out.println("CPU Wins!");
-                return "CPU Won!";
+                infoText.setText("CPU wins :( better luck next time.");
             }
         }
         if (playerPositions.size() + cpuPositions.size() == 9) {
             gameOver = true;
-            System.out.println("Tie Wins!");
+            infoText.setText("Tie!");
             toggleButtons(false);
-            return "Tie!";
 
         }
-
-        return "";
 
     }
 
@@ -235,7 +226,6 @@ public class Main {
         btn7.setEnabled(enabled);
         btn8.setEnabled(enabled);
         btn9.setEnabled(enabled);
-        gameText.setText("Deeze nuts");
 
     }
 
@@ -244,16 +234,16 @@ public class Main {
         // Checks to see if the player or CPU has already played that
         boolean placePiece = false;
         String symbol = " ";
+        infoText.setText(" ");
         checkWinner();
 
         if (pos < 10) {
             if (playerPositions.contains(pos) || cpuPositions.contains(pos)) {
 
-                gameText.setText("You can't go there!");
+                infoText.setText("Sorry! You can't go there. Try again");
 
             } else {
 
-                System.out.println("Great Success!");
                 if (player.equals("player")) {
 
                     playerPositions.add(pos);
@@ -275,8 +265,6 @@ public class Main {
 
             }
             if (placePiece) {
-
-                gameText.setText("");
 
                 if (pos == 1) {
                     btn1.setText(symbol);
@@ -301,10 +289,6 @@ public class Main {
 
             }
 
-        }
-
-        if (!gameOver) {
-            gameText.setText(checkWinner());
         }
 
         System.out.println("Player Positions: " + playerPositions);
