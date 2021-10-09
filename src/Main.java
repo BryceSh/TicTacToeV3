@@ -27,8 +27,6 @@ public class Main {
     static ArrayList<Integer> playerPositions = new ArrayList<>();
     static ArrayList<Integer> cpuPositions = new ArrayList<>();
 
-    public static int frameWidth = 400;
-    public static int frameHeight = 500;
     private static JButton btn1;
     private static JButton btn2;
     private static JButton btn3;
@@ -38,7 +36,6 @@ public class Main {
     private static JButton btn7;
     private static JButton btn8;
     private static JButton btn9;
-    private static JLabel gameText;
     private static boolean gameOver = false; // No touchy!!!
     private static JLabel infoText;
 
@@ -121,9 +118,6 @@ public class Main {
             }
         });
 
-        gameText = new JLabel(" ");
-        gameText.setVisible(true);
-        gameText.setSize(new Dimension(400, 20));
         JButton resetGame = new JButton(new AbstractAction("Reset Game") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,15 +141,15 @@ public class Main {
         infoText.setVisible(true);
 
         Dimension btnSize = new Dimension(50, 50);
-        btn1.setPreferredSize(btnSize);
-        btn2.setPreferredSize(btnSize);
-        btn3.setPreferredSize(btnSize);
-        btn4.setPreferredSize(btnSize);
-        btn5.setPreferredSize(btnSize);
-        btn6.setPreferredSize(btnSize);
-        btn7.setPreferredSize(btnSize);
-        btn8.setPreferredSize(btnSize);
-        btn9.setPreferredSize(btnSize);
+        btn1.setSize(btnSize);
+        btn2.setSize(btnSize);
+        btn3.setSize(btnSize);
+        btn4.setSize(btnSize);
+        btn5.setSize(btnSize);
+        btn6.setSize(btnSize);
+        btn7.setSize(btnSize);
+        btn8.setSize(btnSize);
+        btn9.setSize(btnSize);
 
         buttonPanel.add(btn1);
         buttonPanel.add(btn2);
@@ -192,9 +186,7 @@ public class Main {
         for (List l : winning) {
             if (playerPositions.containsAll(l)) {
                 gameOver = true;
-                System.out.println("Player Wins!");
                 toggleButtons(false);
-                System.out.println(gameOver);
                 infoText.setText("Player Wins!");
             }
             System.out.println("Tested: " + l);
@@ -291,8 +283,7 @@ public class Main {
 
         }
 
-        System.out.println("Player Positions: " + playerPositions);
-        System.out.println("CPU Positions: " + cpuPositions);
+        checkWinner();
 
     }
 
