@@ -39,14 +39,13 @@ public class Main {
     private static JButton btn8;
     private static JButton btn9;
     private static JLabel gameText;
-    private static int btnClick;
     private static boolean gameOver = false; // No touchy!!!
 
 
     public static void main(String[] args) {
 
         JFrame frame = new JFrame();
-        frame.setSize(300, 350);
+        frame.setSize(300, 450);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -54,10 +53,12 @@ public class Main {
         JPanel contentPanel = new JPanel();
         BoxLayout boxlayout = new BoxLayout(contentPanel, BoxLayout.Y_AXIS);
         contentPanel.setLayout(boxlayout);
+        contentPanel.setSize(new Dimension(300, 450));
         frame.add(contentPanel);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 3));
+        buttonPanel.setLayout(new GridLayout(3, 3));
+        buttonPanel.setBounds(0, 60,300,300);
         contentPanel.add(buttonPanel);
 
         JPanel gameInfo = new JPanel();
@@ -119,9 +120,26 @@ public class Main {
             }
         });
 
-        gameText = new JLabel("");
+        gameText = new JLabel(" ");
         gameText.setVisible(true);
         gameText.setSize(new Dimension(400, 20));
+        JButton resetGame = new JButton(new AbstractAction("Reset Game") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleButtons(true);
+                playerPositions.clear();
+                cpuPositions.clear();
+                btn1.setText(" ");
+                btn2.setText(" ");
+                btn3.setText(" ");
+                btn4.setText(" ");
+                btn5.setText(" ");
+                btn6.setText(" ");
+                btn7.setText(" ");
+                btn8.setText(" ");
+                btn9.setText(" ");
+            }
+        });
         Dimension btnSize = new Dimension(50, 50);
         btn1.setPreferredSize(btnSize);
         btn2.setPreferredSize(btnSize);
@@ -153,9 +171,12 @@ public class Main {
         buttonPanel.add(btn8);
         buttonPanel.add(btn9);
         gameInfo.add(gameText);
+        gameInfo.add(resetGame);
 
         frame.pack();
         frame.repaint();
+
+        frame.setSize(300,500);
 
     }
 
@@ -181,6 +202,7 @@ public class Main {
                 gameText.setText("Player Wins!");
                 return "Player Won!";
             }
+            System.out.println("Tested: " + l);
         }
         for (List l : winning) {
             if (cpuPositions.containsAll(l)) {
@@ -213,14 +235,16 @@ public class Main {
         btn7.setEnabled(enabled);
         btn8.setEnabled(enabled);
         btn9.setEnabled(enabled);
+        gameText.setText("Deeze nuts");
 
     }
 
     public static void placePlayerPiece(int pos, String player) {
 
-        // Checks to see if the player or CPU has already played that piece.
+        // Checks to see if the player or CPU has already played that
         boolean placePiece = false;
         String symbol = " ";
+        checkWinner();
 
         if (pos < 10) {
             if (playerPositions.contains(pos) || cpuPositions.contains(pos)) {
